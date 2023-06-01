@@ -58,6 +58,29 @@ class NotificationService {
           }
 
       }
+
+
+
+
+
+
+
+// Add New Code
+Future<String> getDeviceToken()async{
+   String? token = await messaging.getToken();
+    return token!;
+}
+
+
+void isTokenRefresh()async{
+   messaging.onTokenRefresh.listen((event) {
+    event.toString();
+    print("Refresh");
+   });
+}
+
+
+
       
     
 }
@@ -102,6 +125,16 @@ class _HomePageState extends State<HomePage> {
     super.initState();
 
     notificationService.requestNotificationPermission(); //* <-- This Call function
+
+    // Call new Function
+    notificationService.isTokenRefresh();
+    
+    notificationService.getDeviceToken().then((value){
+
+       print("Device Token This --> $value");
+       
+    });
+    
     
   }
   

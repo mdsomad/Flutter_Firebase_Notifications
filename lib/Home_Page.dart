@@ -20,7 +20,15 @@ class _HomePageState extends State<HomePage> {
     // TODO: implement initState
     super.initState();
 
-    notificationService.requestNotificationPermission(); //* <-- This Call function
+    notificationService.requestNotificationPermission();      //* <-- This Call function
+
+    notificationService.isTokenRefresh();
+    
+    notificationService.getDeviceToken().then((value){
+
+       print("Device Token This --> $value");
+       
+    });
     
   }
   
