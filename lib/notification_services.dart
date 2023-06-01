@@ -1,20 +1,3 @@
-# Flutter Firebase Notifications
-
-A new Flutter project.
-
-## Getting Started
-
-
-- First Add this package --> app_settings: ^4.2.0
-```sh
-  flutter pub add app_settings
-```
-
-
-
-- 1: TODO Create Class NotificationService Codes
-
-```sh
 
 import 'package:app_settings/app_settings.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -34,7 +17,7 @@ class NotificationService {
       criticalAlert: true,
       provisional: true,
       sound: true
-    );
+      );
 
   
       if(settings.authorizationStatus == AuthorizationStatus.authorized){
@@ -70,52 +53,3 @@ class NotificationService {
  
   
 }
-
-
-```
-
-
-
-- 2 : HomePage Codes 
-
-```sh
-import 'package:flutter/material.dart';
-import 'package:flutter_firebase_notifications/notification_services.dart';
-
-
-
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
-
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-
-  NotificationService notificationService = NotificationService();   //* <-- Create NotificationService class instance & object
-  
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-
-    notificationService.requestNotificationPermission(); //* <-- This Call function
-    
-  }
-  
-  
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold();
-  }
-
-
-
-
-
-}
-
-
-```
