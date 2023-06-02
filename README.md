@@ -9,7 +9,8 @@ A new Flutter project.
   
   
 <tr>                    
-   <th> Notifications View</th>
+   <th>App background Notifications View</th>
+   <th>Notifications Click Open App View</th>
 </tr>  
   
   
@@ -17,7 +18,8 @@ A new Flutter project.
 <tr>
 
 <td>
-  <img src="https://github.com/mdsomad/Flutter_Firebase_Notifications/assets/103892160/2e9df0df-7572-4306-aa1c-6ca59c236adc" alt="HNotifications View Example" width="260"/>
+    <img src=" " alt="App background Notifications View Example" width="260"/>
+    <img src=" " alt="Notifications Click Open App View Example" width="260"/>
 </td>
 
   

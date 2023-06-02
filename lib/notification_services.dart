@@ -6,6 +6,7 @@ import 'package:app_settings/app_settings.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_firebase_notifications/message_screen.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 FlutterLocalNotificationsPlugin notificationsPlugin = FlutterLocalNotificationsPlugin();
 class NotificationService {
@@ -13,7 +14,13 @@ class NotificationService {
  FirebaseMessaging messaging = FirebaseMessaging.instance;
  final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
-  
+
+
+
+
+
+
+//TODO function to initialise flutter local notification plugin to show notifications for android when app is active
 void initLocalNotifications(BuildContext context, RemoteMessage message )async{
 
     var androidInitializationSettings = const AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -26,8 +33,8 @@ void initLocalNotifications(BuildContext context, RemoteMessage message )async{
 
     await _flutterLocalNotificationsPlugin.initialize(
        initializationSettings,
-       onDidReceiveNotificationResponse: (payload) {
-         
+       onDidReceiveNotificationResponse:(payload) {
+           handleMessage(context, message);
        },
        
     );
@@ -44,11 +51,20 @@ void firebaseInit(BuildContext context){
     if(kDebugMode){
        print(message.notification!.title.toString());
        print(message.notification!.body.toString());
+       print(message.data.toString());
+       print(message.data['type'].toString());
+       print(message.data['id'].toString());
     }
+
       if(Platform.isAndroid){
         initLocalNotifications(context, message);
         showNotification(message);
+      }else{
+        showNotification(message);
       }
+
+
+
   });
   
   
@@ -95,7 +111,7 @@ Future<void> showNotification(RemoteMessage message)async{
           0,
           message.notification!.title.toString(),
           message.notification!.body.toString(),
-          notificationDetails ,
+          notificationDetails,
       );
     });
  
@@ -168,6 +184,49 @@ void isTokenRefresh()async{
     print("Refresh");
    });
 }
+
+
+
+
+
+
+
+
+
+
+  //* handle tap on notification when app is in background or terminated
+  Future<void> setupInteractMessage(BuildContext context)async{
+
+    //* when app is terminated
+    RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
+
+    if(initialMessage != null){
+      handleMessage(context, initialMessage);
+    }
+
+
+    //* when app ins background
+    FirebaseMessaging.onMessageOpenedApp.listen((event) {
+      handleMessage(context, event);
+    });
+
+  }
+
+
+
+
+
+
+
+void handleMessage(BuildContext context,RemoteMessage message){
+    if(message.data['type'] == 'msj' ){
+       Navigator.push(context,MaterialPageRoute(builder: (context) => MessageScreen(id:message.data['id'],),));
+    }
+}
+
+
+
+
 
  
   

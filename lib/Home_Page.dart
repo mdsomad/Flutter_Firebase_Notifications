@@ -23,7 +23,7 @@ class _HomePageState extends State<HomePage> {
     notificationService.requestNotificationPermission();      //* <-- This Call function
     
     notificationService.firebaseInit(context);
-    // notificationService.showNotification();
+    notificationService.setupInteractMessage(context);
    // notificationService.isTokenRefresh();
 
     notificationService.getDeviceToken().then((value){
@@ -37,7 +37,11 @@ class _HomePageState extends State<HomePage> {
   
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Flutter Notification"),
+      ),
+    );
   }
 
 
