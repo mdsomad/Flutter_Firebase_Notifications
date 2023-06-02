@@ -1,5 +1,9 @@
+import 'dart:convert';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_notifications/notification_services.dart';
+import 'package:http/http.dart' as http;
 
 
 
@@ -12,7 +16,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
-  NotificationService notificationService = NotificationService();   //* <-- Create NotificationService class instance & object
+  NotificationService notificationServices = NotificationService();   //* <-- Create NotificationService class instance & object
   
 
   @override
@@ -20,13 +24,13 @@ class _HomePageState extends State<HomePage> {
     // TODO: implement initState
     super.initState();
 
-    notificationService.requestNotificationPermission();      //* <-- This Call function
+    notificationServices.requestNotificationPermission();      //* <-- This Call function
     
-    notificationService.firebaseInit(context);
-    notificationService.setupInteractMessage(context);
-   // notificationService.isTokenRefresh();
+    notificationServices.firebaseInit(context);
+    notificationServices.setupInteractMessage(context);
+   // notificationServices.isTokenRefresh();
 
-    notificationService.getDeviceToken().then((value){
+    notificationServices.getDeviceToken().then((value){
 
        print("Device Token This --> $value");
        
@@ -41,6 +45,56 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text("Flutter Notification"),
       ),
+
+      body: Center(
+        child: TextButton(onPressed: (){
+
+          //* send notification from one device to another
+          notificationServices.getDeviceToken().then((value)async{
+
+            var data = {
+              'to' : value.toString(),
+              'priority': 'high',
+              'notification' : {
+                'title' : 'Somad' ,
+                'body' : 'Learning Firebase Notification' ,
+            },
+              
+            'data' : {
+                'type' : 'msj' ,
+                'id' : 'Somad1234'
+              }
+
+            };
+
+            await http.post(Uri.parse('https://fcm.googleapis.com/fcm/send'),
+            body: jsonEncode(data) ,
+              headers: {
+                'Content-Type': 'application/json; charset=UTF-8',
+                'Authorization' : 'key=AAAAp38j7B8:APA91bFvF0j8Ku7u5ELF8WFstukPOYj8rgc6tiJyks4GYnUMK2c06rRHgyTon6oWSbhfYzZv3-5Mq7DhUHYIRAwHji-NH5QDPtTkdYPMx_rJ-ok2rCACUCUuKB5T9bCzWS62t-cdc7Yp'
+              }
+            ).then((value){
+              if (kDebugMode) {
+                print(value.body.toString());
+              }
+            }).onError((error, stackTrace){
+              if (kDebugMode) {
+                print(error);
+              }
+            });
+
+
+
+          });
+
+
+        },
+            child: Text('Send Notifications')),
+      ),
+  
+
+      
+      
     );
   }
 
